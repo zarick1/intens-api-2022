@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intens-api
+  labels:
+    app: intens-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: intens-api
+  template:
+    metadata:
+      labels:
+        app: intens-api
+    spec:
+      containers:
+        - name: intens-api
+          image: intens-api-oracle-full:dev
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 4
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

@@ -16,3 +16,11 @@ https://docs.github.com/en/actions/automating-builds-and-tests/building-and-test
 1. Java 8 https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html
 2. Eclipse / IntelliJ / Alat po izboru
 3. Docker https://www.docker.com/products/docker-desktop
+
+
+### Kako pokrenuti Kubernetes
+1. Build local image: docker build -t intens-api-oracle-full:dev .
+2. Start Minikube: minikube start --driver=docker
+3. Load local image into Minikube: minikube image load intens-api-oracle-full:dev
+4. Apply manifests: kubectl apply -f k8s/
+5. Get URL and open the app: minikube service intens-api-svc --url
