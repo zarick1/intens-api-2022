@@ -31,6 +31,20 @@ Ovaj repozitorijum sadrži moje rešenje praktikantskog zadatka za DevOps pozici
 - Lokalni build koristi **Oracle** base image (tako je navedeno u zadatku pod sekcijom Potrebni alati).
 - CI/CD build koristi **`Dockerfile.ci`** sa **Temurin JDK 8** jer je otvoren i dostupan na GitHub Actions/Render.
 
+#### Lokalno (Dockerfile – Oracle JDK 8)
+
+Za lokalni build koristi se Dockerfile sa Oracle JDK 8 (po zahtevu zadatka).
+
+Napomena: pre prvog builda potrebno je da imate Oracle nalog i da potvrdite licencu za `serverjre:8` na [Oracle Container Registry](https://container-registry.oracle.com/).
+
+1. Login na Oracle Container Registry (koristite Oracle nalog):
+docker login container-registry.oracle.com
+2. Build slike iz Dockerfile-a:
+docker build -t intens-api-oracle:dev .
+3. Pokretanje kontejnera:
+docker run -p 8080:8080 intens-api-oracle:dev
+
+
 ---
 
 ### 2. Deployment
