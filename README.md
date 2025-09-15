@@ -18,9 +18,50 @@ https://docs.github.com/en/actions/automating-builds-and-tests/building-and-test
 3. Docker https://www.docker.com/products/docker-desktop
 
 
-### Kako pokrenuti Kubernetes
+
+
+# Intense DevOps Praktikantski Zadatak - Resenje
+
+Ovaj repozitorijum sadrži moje rešenje praktikantskog zadatka za DevOps poziciju.
+
+---
+
+### 1. Dockerfile
+- Napravljen je **multi-stage Dockerfile** (Oracle JDK 8 za lokal, Temurin 8 za cloud/CI).
+- Lokalni build koristi **Oracle** base image (tako je navedeno u zadatku pod sekcijom Potrebni alati).
+- CI/CD build koristi **`Dockerfile.ci`** sa **Temurin JDK 8** jer je otvoren i dostupan na GitHub Actions/Render.
+
+---
+
+### 2. Deployment
+
+#### A) Cloud (Render) – glavni URL
+- Service: Render Web Service (Docker)
+- Dockerfile: `Dockerfile.ci`
+- Env: `PORT=8080`
+- URL: https://intens-api-2022-fpwy.onrender.com
+
+#### B) Lokalno (Kubernetes / Minikube)
 1. Build local image: docker build -t intens-api-oracle-full:dev .
 2. Start Minikube: minikube start --driver=docker
 3. Load local image into Minikube: minikube image load intens-api-oracle-full:dev
 4. Apply manifests: kubectl apply -f k8s/
 5. Get URL and open the app: minikube service intens-api-svc --url
+
+---
+
+### 3. CI/CD (GitHub Actions)
+
+#### CI (Pull Request -> master)
+- Workflow: .github/workflows/ci-pr.yml
+- Svaki PR prema master grani automatski pokreće Maven testove (mvn test).
+
+#### CD (Push -> master)
+- Workflow: .github/workflows/cd-master.yml
+- Radi sledeće:
+    1. Gradi aplikaciju (mvn clean package).
+    2. Gradi i pushuje Docker image (Dockerfile.ci) na GitHub Container Registry:
+ghcr.io/zarick1/intens-api-2022:latest
+    3. Poziva Render Deploy Hook → Render odmah uradi redeploy sa novom slikom
+  
+
